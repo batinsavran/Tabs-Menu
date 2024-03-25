@@ -1,59 +1,45 @@
-package com.example.myapplication
-
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.myapplication.databinding.ActivityHomeBinding
-import com.example.myapplication.home.ActiveJobFragment
-import com.example.myapplication.home.PastJobFragment
+import com.example.myapplication.R
 import com.google.android.material.tabs.TabLayout
-import com.example.myapplication.databinding.FragmentActiveJobBinding // ActiveJobFragment için
-import com.example.myapplication.databinding.FragmentPastJobBinding // PastJobFragment için
-
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityHomeBinding
-
-    private fun goPastJobFragment() {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, PastJobFragment())
-            .commit()
-    }
-
-    private fun goActiveJobFragment() {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainerView, ActiveJobFragment())
-            .commit()
-    }
+    private var tabLayout: TabLayout? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityHomeBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_main)
 
-        goPastJobFragment()
+        tabLayout = findViewById<TabLayout>(R.id.tabLayout)
 
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.let {
-                    when (it.position) {
-                        0 -> {
-                            goPastJobFragment()
-                        }
-                        1 -> {
-                            goActiveJobFragment()
-                        }
-                    }
+        tabLayout?.addOnTabSelectedListener(object : OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab) {
+                val position = tab.position
+                when (position) {
+                    0 ->                         // Geçmiş İlanlar Tab'ı seçildiğinde yapılacak işlemler
+                        showToast("Geçmiş İlanlar seçildi")
+
+                    1 ->                         // Aktif İlanlar Tab'ı seçildiğinde yapılacak işlemler
+                        showToast("Aktif İlanlar seçildi")
+
+                    2 ->                         // Bekleyen İlanlar Tab'ı seçildiğinde yapılacak işlemler
+                        showToast("Bekleyen İlanlar seçildi")
                 }
             }
 
-            override fun onTabUnselected(p0: TabLayout.Tab?) {
-                // Boş bırakıldı
+            override fun onTabUnselected(tab: TabLayout.Tab) {
+                // Implement if needed
             }
 
-            override fun onTabReselected(p0: TabLayout.Tab?) {
-                // Boş bırakıldı
+            override fun onTabReselected(tab: TabLayout.Tab) {
+                // Implement if needed
             }
         })
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 }
